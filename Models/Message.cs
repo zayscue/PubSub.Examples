@@ -49,7 +49,8 @@ namespace Models
     [Serializable]
     public enum MessageType
     {
-        Info, 
+        Info,
+        Warning,
         Error
     }
 }
