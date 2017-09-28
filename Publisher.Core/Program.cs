@@ -28,6 +28,6 @@ namespace Publisher.Core
         }
 
         public static string GetMessage(string[] args)
-            => args.Length > 0 ? string.Join(" ", args) : "info: Hello World!";
+            => args.Length > 0 ? string.Join(" ", args) : "Hello World!";
     }
 }
