@@ -1,30 +1,22 @@
-﻿using System;
-using Models;
-using RabbitMQ.Client;
-
-namespace Publisher
+﻿namespace Publisher
 {
     public class Program
     {
         public static void Main(string[] args)
         {
-            var factory = new ConnectionFactory() {HostName = "localhost"};
-            using(var connection = factory.CreateConnection())
-            using (var channel = connection.CreateModel())
+            using (var eventBus = new EventBusRabbitMQ.EventBusRabbitMQ("s99-rabbitmq.ecsdev.com"))
             {
-                channel.ExchangeDeclare(exchange: "logs", type: "fanout");
-
-                var message = new Message
+                var message = new Models.Message
                 {
-                    Type = MessageType.Info,
+                    Type = Models.MessageType.Info,
                     Description = GetMessage(args)
                 };
-                channel.BasicPublish(exchange: "logs", routingKey: "", basicProperties: null, body: message.Serialize());
-                Console.WriteLine(" [x] Sent {0}", message);
+                for (var i = 0; i < 100; i++)
+                {
+                    eventBus.Publish(new MessageIntegrationEvent(message));
+                    eventBus.Publish(new TestIntegrationEvent(new Test()));
+                }
             }
-
-            Console.WriteLine(" Press [enter] to exit.");
-            Console.ReadLine();
         }
 
         public static string GetMessage(string[] args)

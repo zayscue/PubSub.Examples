@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace Publisher.Core
+﻿namespace Publisher.Core
 {
     public class Program
     {
@@ -19,7 +17,6 @@ namespace Publisher.Core
                     eventBus.Publish(new TestIntegrationEvent(new Test()));
                 }
             }
-            //Environment.Exit(0);
         }
 
         public static string GetMessage(string[] args)
