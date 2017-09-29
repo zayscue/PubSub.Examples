@@ -13,7 +13,7 @@ namespace EventBusRabbitMQ
 {
     public class EventBusRabbitMQ : IEventBus, IDisposable
     {
-        const string BROKER_NAME = "logs";
+        const string BROKER_NAME = "direct_logs";
         
         private readonly IRabbitMQPersistentConnection _persistentConnection;
         private readonly Dictionary<string, List<IIntegrationEventHandler>> _handlers;
@@ -32,7 +32,7 @@ namespace EventBusRabbitMQ
             _consumerChannel = CreateConsumerChannel();
         }
 
-        void IEventBus.Publish(IntegrationEvent @event)
+        public void Publish(IntegrationEvent @event)
         {
             if (!_persistentConnection.IsConnected)
             {
@@ -57,7 +57,7 @@ namespace EventBusRabbitMQ
             }
         }
 
-        void IEventBus.Subscribe<T>(IIntegrationEventHandler<T> handler)
+        public void Subscribe<T>(IIntegrationEventHandler<T> handler) where T : IntegrationEvent
         {
             var eventName = typeof(T).Name;
             if(_handlers.ContainsKey(eventName))
@@ -83,7 +83,7 @@ namespace EventBusRabbitMQ
             }
         }
 
-        void IEventBus.Unsubscribe<T>(IIntegrationEventHandler<T> handler)
+        public void Unsubscribe<T>(IIntegrationEventHandler<T> handler) where T : IntegrationEvent
         {
             if(handler == null) return;
             var eventName = typeof(T).Name;
@@ -155,6 +155,10 @@ namespace EventBusRabbitMQ
                     if(_consumerChannel != null)
                     {
                         _consumerChannel.Dispose();
+                    }
+                    if (_persistentConnection != null)
+                    {
+                        _persistentConnection.Dispose();
                     }
                     _handlers.Clear();
                 }
