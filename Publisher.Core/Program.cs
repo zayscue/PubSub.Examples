@@ -13,8 +13,11 @@ namespace Publisher.Core
                     Type = Models.MessageType.Info,
                     Description = GetMessage(args)
                 };
-                eventBus.Publish(new MessageIntegrationEvent(message));
-                eventBus.Publish(new TestIntegrationEvent(new Test()));
+                for (var i = 0; i < 100; i++)
+                {
+                    eventBus.Publish(new MessageIntegrationEvent(message));
+                    eventBus.Publish(new TestIntegrationEvent(new Test()));
+                }
             }
             //Environment.Exit(0);
         }
