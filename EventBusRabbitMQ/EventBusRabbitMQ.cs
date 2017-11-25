@@ -26,7 +26,7 @@ namespace EventBusRabbitMQ
         {
             if(string.IsNullOrWhiteSpace(connectionString))
                 throw new ArgumentException($"{nameof(connectionString)} can not be null, empty, or whitespace.");
-            _persistentConnection = new DefaultRabbitMQPersisterConnection(new ConnectionFactory { HostName = connectionString });
+            _persistentConnection = new DefaultRabbitMQPersisterConnection(new ConnectionFactory { HostName = connectionString, UserName = "user", Password = "password" });
             _handlers = new Dictionary<string, List<IIntegrationEventHandler>>();
             _eventTypes = new List<Type>();
             _consumerChannel = CreateConsumerChannel();

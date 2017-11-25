@@ -4,7 +4,7 @@
     {
         public static void Main(string[] args)
         {
-            using (var eventBus = new EventBusRabbitMQ.EventBusRabbitMQ("s99-rabbitmq.ecsdev.com"))
+            using (var eventBus = new EventBusRabbitMQ.EventBusRabbitMQ("localhost"))
             {
                 var message = new Models.Message
                 {
